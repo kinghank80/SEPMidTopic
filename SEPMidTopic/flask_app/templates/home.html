@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}選課系統{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #student {
+            height: 250px;
+            width: 300px;
+            float: left;
+            margin-right: 20px;
+            text-align: left;
+        }
+        #input {
+            margin: 20px 0;
+        }
+        #input div {
+            margin-bottom: 10px;
+        }
+        #input label {
+            font-weight: bold;
+        }
+        #course_list, #timetable {
+            margin-top: 30px;
+            clear: both;
+        }
+        #course_list table, #timetable table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #course_list td, #timetable td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        button, input[type="submit"] {
+            margin-top: 10px;
+            padding: 5px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>選課系統</h1>
+    
+    <div id="student">
+        <p>
+            <font size="5">學號：{{ student['Sid'] }}</font><br>
+            <font size="5">姓名：{{ student['Name'] }}</font><br>
+            <font size="5">系所：{{ student['Department'] }}</font><br>
+            <font size="5">年級：{{ student['Grade'] }}</font><br>
+            <font size="5">學分：{{ student['Credit'] }}</font><br>
+        </p>
+        <button type="button" onclick="window.location.href='logout'">登出</button>
+    </div>
+    
+    <div id="input">
+        <div id="search_id">
+            <form action="/search_id" method="POST">
+                <label for="search_id">課程代碼</label><br>
+                <input type="search" id="search_id" name="search_id" placeholder="課程代碼">
+                <input type="submit" value="查詢">
+            </form>
+        </div>
+
+        <div id="search_name">
+            <form action="/search_name" method="POST">
+                <label for="search_name">課程名稱</label><br>
+                <input type="search" id="search_name" name="search_name" placeholder="課程名稱">
+                <input type="submit" value="查詢">
+            </form>
+        </div>
+
+        <div id="add_course">
+            <form action="/add_course" method="POST">
+                <label for="cid">加選</label><br>
+                <input type="search" id="cid" name="cid" placeholder="課程代碼">
+                <input type="submit" value="加選">
+            </form>
+        </div>
+
+        <div id="drop_course">
+            <form action="/drop_course" method="POST">
+                <label for="cid">退選</label><br>
+                <input type="search" id="cid" name="cid" placeholder="課程代碼">
+                <input type="submit" value="退選">
+            </form>
+        </div>
+    </div>
+
+    <div id="course_list">
+        <font size="5">課程列表：</font><br>
+        {% block content %}
+        <table>
+            <tr>
+                <td>代碼</td>
+                <td>名稱</td>
+                <td>學系</td>
+                <td>學分</td>
+                <td>人數</td>
+                <td>時間</td>
+                <td>必修</td>
+            </tr>
+            {% for x in course %}
+            <tr>
+                <td>{{ x['Cid'] }}</td>
+                <td>{{ x['Name'] }}</td>
+                <td>{{ x['Department'] }}</td>
+                <td>{{ x['Credit'] }}</td>
+                <td>{{ x['Members'] }}/{{ x['Capacity'] }}</td>
+                <td>{{ x['Time_id'] }}</td>
+                <td>{{ '是' if x['Is_required'] else '否' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endblock %}
+    </div>
+
+    <div id="timetable">
+        <font size="5">課表：</font><br>
+        <table>
+            <tr>
+                <td></td>
+                <td>星期一</td>
+                <td>星期二</td>
+                <td>星期三</td>
+                <td>星期四</td>
+                <td>星期五</td>
+                <td>星期六</td>
+                <td>星期日</td>
+            </tr>
+            {% for x in range(14) %}
+            <tr>
+                <td>第{{ x+1 }}節</td>
+                {% for y in range(7) %}
+                <td>
+                    {% for z in timetable %}
+                    {% if (z['Time_id'] - 1) // 14 == y and (z['Time_id'] - 1) % 14 == x %}
+                    {{ z['Cid'] }}<br>{{ z['Name'] }}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

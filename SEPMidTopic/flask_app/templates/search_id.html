@@ -1,0 +1,38 @@
+{% extends "home.html" %}
+
+{% block title %}選課系統{% endblock %}
+
+{% block content %}
+<div>
+    <form action="/home">
+        <button type="submit">返回</button>
+    </form>
+    <p>課程代碼查詢：{{ cid }}</p>
+    <table>
+        <tr>
+            <td>代碼</td>
+            <td>名稱</td>
+            <td>學系</td>
+            <td>學分</td>
+            <td>人數</td>
+            <td>時間</td>
+            <td>必修</td>
+        </tr>
+        <tr>
+            <td>{{ course['Cid'] }}</td>
+            <td>{{ course['Name'] }}</td>
+            <td>{{ course['Department'] }}</td>
+            <td>{{ course['Credit'] }}</td>
+            <td>{{ course['Members'] }}/{{ course['Capacity'] }}</td>
+            <td>{{ course['Time_id'] }}</td>
+            {% if course['Is_required'] %}
+                <td>是</td>
+            {% elif course['Is_required'] == 0 %}
+                <td>否</td>
+            {% else %}
+                <td></td>
+            {% endif %}
+        </tr>
+    </table>
+</div>
+{% endblock %}

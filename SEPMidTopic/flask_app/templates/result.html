@@ -1,0 +1,10 @@
+{% extends "home.html" %}
+
+{% block title %}加退選結果{% endblock %}
+
+{% block content %}
+<p>{{ result|safe }}</p>
+<form action="/home">
+    <button type="submit">返回</button>
+</form>
+{% endblock %}
