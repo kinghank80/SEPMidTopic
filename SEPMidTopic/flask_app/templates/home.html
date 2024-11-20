@@ -144,7 +144,7 @@
                 {% for y in range(7) %}
                 <td>
                     {% for z in timetable %}
-                    {% if (z['Time_id'] - 1) // 14 == y and (z['Time_id'] - 1) % 14 == x %}
+                    {% if z['Time_id'] // 14 == y and z['Time_id'] % 14 == x %}
                     {{ z['Cid'] }}<br>{{ z['Name'] }}
                     {% endif %}
                     {% endfor %}
